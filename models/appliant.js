@@ -10,7 +10,8 @@ module.exports = function(sequelize, DataTypes) {
     source: DataTypes.STRING,
     over_21: DataTypes.BOOLEAN,
     reason: DataTypes.STRING,
-    workflow_state: DataTypes.STRING
+    workflow_state: DataTypes.STRING,
+    date: DataTypes.DATEONLY
   }, {
     classMethods: {
       associate: function(models) {

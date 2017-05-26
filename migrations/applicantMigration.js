@@ -48,6 +48,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      date: {
+        type: Sequelize.DATEONLY,
+        allowNull: false
+      }
     });
   },
   down: function(queryInterface, Sequelize) {
