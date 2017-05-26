@@ -1,16 +1,22 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var Kitchen = sequelize.define('Kitchen', {
-    name: DataTypes.STRING,
-    numberOvens: DataTypes.INTEGER,
-    status: DataTypes.STRING
+  var Applicants = sequelize.define('Applicants', {
+    first_name: DataTypes.STRING,
+    last_name: DataTypes.STRING,
+    region: DataTypes.STRING,
+    phone: DataTypes.STRING,
+    email: DataTypes.STRING,
+    phone_type: DataTypes.STRING,
+    source: DataTypes.STRING,
+    over_21: DataTypes.BOOLEAN,
+    reason: DataTypes.STRING,
+    workflow_state: DataTypes.STRING
   }, {
-    timestamps: false,
     classMethods: {
       associate: function(models) {
         // associations can be defined here
       }
     }
   });
-  return Kitchen;
+  return Applicants;
 };
