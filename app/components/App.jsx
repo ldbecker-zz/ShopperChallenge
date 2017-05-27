@@ -19,6 +19,7 @@ class App extends React.Component {
     this.showApplication = this.showApplication.bind(this);
     this.submitApplication = this.submitApplication.bind(this);
     this.makeApplications = this.makeApplications.bind(this);
+    this.funnel = this.funnel.bind(this);
   }
 
   makeApplications(e) {
@@ -66,15 +67,68 @@ class App extends React.Component {
     this.setState({registerVisible: true});
   }
 
+  dayFromDate(date) {
+    return parseInt(date.split("-")[2]);
+  }
+
+  dateFromDay(day) {
+    if(day < 10) return "2014-12-0" + day;
+    return "2014-12-" + day;
+  }
+
+  weekFromDate(date) {
+    var day = this.dayFromDate(date);
+    var week = Math.floor(day / 7);
+    return week;
+  }
+
+  filter(applications) {
+    var sorted = applications.sort(function(a, b) {
+      if(a.date === b.date) return 0;
+      if(a.date > b.date) return 1;
+      return -1;
+    });
+    //mondays = 1, 8, 15, 22, 29
+    var weeks = [{start: "2014-12-01", end: "2014-12-07"}, {start: "2014-12-08", end: "2014-12-14"}, {start: "2014-12-15", end: "2014-12-21"}, {start: "2014-12-22", end: "2014-12-28"}, {start: "2014-12-29", end: "2014-12-31"}];
+    for(var i = 0; i < sorted.length; i++) {
+      var week = this.weekFromDate(sorted[i].date);
+      var workflowState = sorted[i].workflow_state;
+      if(!weeks[week][workflowState]) weeks[week][workflowState] = 0;
+      weeks[week][workflowState] += 1;
+      if(workflowState === "quiz_completed") {
+        if(!weeks[week]["quiz_started"]) weeks[week]["quiz_started"] = 0;
+        weeks[week]["quiz_started"] += 1;
+        if(!weeks[week]["applied"]) weeks[week]["applied"] = 0;
+        weeks[week]["applied"] += 1;
+      } else if (workflowState === "onboarding_completed") {
+        if(!weeks[week]["onboarding_requested"]) weeks[week]["onboarding_requested"] = 0;
+        weeks[week]["onboarding_requested"] += 1;
+        if(!weeks[week]["applied"]) weeks[week]["applied"] = 0;
+        weeks[week]["applied"] += 1;
+      } else if (workflowState !== "applied") {
+        if(!weeks[week]["applied"]) weeks[week]["applied"] = 0;
+        weeks[week]["applied"] += 1;
+      }
+    }
+    var startWeek = this.weekFromDate(sorted[0].date);
+    var endWeek = this.weekFromDate(sorted[sorted.length - 1].date);
+    var goodWeeks = weeks.slice(startWeek, endWeek + 1);
+    console.log(goodWeeks);
+    document.getElementById("funnelDisplay").innerHTML = JSON.stringify(goodWeeks);
+  }
+
   funnel(e) {
     e.preventDefault();
     if(document.getElementById("startDate").value >= document.getElementById("endDate").value) {
       alert("Not a valid date range.");
       return;
     }
+    var context = this;
     axios.post('/funnel', {startDate: document.getElementById("startDate").value, endDate: document.getElementById("endDate").value})
     .then(function(resp) {
       console.log(resp);
+      var filtered = context.filter(resp.data);
+      console.log(filtered);
     });
   }
 
@@ -131,6 +185,7 @@ class App extends React.Component {
               return (<option value={"2014-12-" + day}>{day}</option>);
             })}</select><br/>
             <button type="submit">Get Application Data for Range</button>
+            <div id="funnelDisplay"></div>
           </form>
         </div>
       );
