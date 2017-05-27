@@ -36,7 +36,8 @@ class Confirm extends React.Component {
             To proceed with the interview, you must consent to a background check. Check the box, and press the button below to submit your application. <br/>
             I consent to a background check: <input id="bgcheck" type="checkbox"></input><br/>
             <button type="submit">Submit Application</button>
-          </form>
+          </form><br/><br/>
+          <a href="/">Submit a new Application</a>
         </div>
       );
   }

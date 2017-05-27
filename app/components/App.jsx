@@ -18,6 +18,28 @@ class App extends React.Component {
 
     this.showApplication = this.showApplication.bind(this);
     this.submitApplication = this.submitApplication.bind(this);
+    this.makeApplications = this.makeApplications.bind(this);
+  }
+
+  makeApplications(e) {
+    e.preventDefault();
+
+    var curApp = JSON.parse("{\"first_name\":\"Random\",\"last_name\":\"Applicant\",\"phone\":\"\",\"email\":\"\",\"source\":\"\",\"over_21\":false,\"reason\":\"\",\"region\":\"San Francisco Bay Area\",\"phone_type\":\"iPhone 6/6 Plus\",\"workflow_state\":\"applied\",\"date\":\"2014-12-01\"}");
+  
+    document.getElementById("status").innerHTML = "Making Application...";
+    var workflowIndex = Math.floor(Math.random() * this.state.workflowStates.length);
+    var dayIndex = Math.floor(Math.random() * 31);
+    curApp.workflow_state = this.state.workflowStates[workflowIndex];
+    curApp.date = "2014-12-" + this.state.days[dayIndex];
+    axios.post("/newApplication", {
+      application: curApp
+    }).then(function(resp) {
+      document.getElementById("status").innerHTML = "Made.";
+      console.log(resp);
+    });
+  
+    
+
   }
 
   submitApplication(e) {
@@ -84,7 +106,12 @@ class App extends React.Component {
             <form onSubmit={this.showApplication}>
               <button type="submit">Submit New Application</button>
             </form>
-          }
+          }<br/><br/>
+          <form id="makeForm" onSubmit={this.makeApplications}>
+            Populate the DB With Random Applications: <br/>
+            <button type="submit" id="makeApplications">Make Random Application</button>
+            <div id="status">Status: Idle</div>
+          </form>
         </div>
       );
   }
