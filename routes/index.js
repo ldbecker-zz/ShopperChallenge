@@ -7,4 +7,12 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.get('/confirm', function(req, res, next) {
+  res.render('confirm', { title: 'Confirm'});
+});
+
+router.post('/newApplication', function(req, res, next) {
+
+});
+
 module.exports = router;
