@@ -26,7 +26,6 @@ class Confirm extends React.Component {
       application: application
     }).then(function(resp) {
       console.log(resp);
-      alert(resp);
     });
   }
 
