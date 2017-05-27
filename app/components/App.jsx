@@ -59,12 +59,23 @@ class App extends React.Component {
     console.log(application);
     localStorage.setItem("application", JSON.stringify(application));
     window.location = "/confirm";
-    //this.setState({registerVisible: false});
   }
 
   showApplication(e) {
     e.preventDefault();
     this.setState({registerVisible: true});
+  }
+
+  funnel(e) {
+    e.preventDefault();
+    if(document.getElementById("startDate").value >= document.getElementById("endDate").value) {
+      alert("Not a valid date range.");
+      return;
+    }
+    axios.post('/funnel', {startDate: document.getElementById("startDate").value, endDate: document.getElementById("endDate").value})
+    .then(function(resp) {
+      console.log(resp);
+    });
   }
 
   render() {
@@ -111,6 +122,15 @@ class App extends React.Component {
             Populate the DB With Random Applications: <br/>
             <button type="submit" id="makeApplications">Make Random Application</button>
             <div id="status">Status: Idle</div>
+          </form><br/><br/>
+          <form id="funnelForm" onSubmit={this.funnel}>
+            Start Date: (December X 2014) : <select id="startDate">{this.state.days.map(function(day) {
+              return (<option value={"2014-12-" + day}>{day}</option>);
+            })}</select><br/>
+            End Date: (December X 2014) : <select id="endDate">{this.state.days.map(function(day) {
+              return (<option value={"2014-12-" + day}>{day}</option>);
+            })}</select><br/>
+            <button type="submit">Get Application Data for Range</button>
           </form>
         </div>
       );
