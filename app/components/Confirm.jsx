@@ -1,4 +1,5 @@
 const React = require('react');
+const axios = require('axios');
 
 class Confirm extends React.Component {
 	constructor(props) {
@@ -21,7 +22,12 @@ class Confirm extends React.Component {
     if(!document.getElementById("bgcheck").checked) return;
 
     var application = JSON.parse(localStorage.getItem("application"));
-    console.log(application);
+    axios.post("/newApplication", {
+      application: application
+    }).then(function(resp) {
+      console.log(resp);
+      alert(resp);
+    });
   }
 
   render() {

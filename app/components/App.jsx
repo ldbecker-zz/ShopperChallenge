@@ -2,6 +2,8 @@ import { Router, Route, browserHistory } from 'react-router';
 const React = require('react');
 const ReactDOM = require('react-dom');
 const Confirm = require('./Confirm.jsx');
+const axios = require('axios');
+
 class App extends React.Component {
 	constructor(props) {
     super(props);
@@ -62,6 +64,7 @@ class App extends React.Component {
                   return (<option value={phoneType}>{phoneType}</option>);
                 })}
               </select><br/>
+              Email: <input id="email" type="text"></input><br/>
               Source: <input id="source" type="text"></input><br/>
               Are you over 21? <input id="over_21" type="checkbox"></input><br/>
               Reason: <input id="reason" type="text"></input><br/>

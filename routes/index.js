@@ -12,7 +12,10 @@ router.get('/confirm', function(req, res, next) {
 });
 
 router.post('/newApplication', function(req, res, next) {
-
+  console.log(req.body.application);
+  models.Applicants.create(req.body.application).then(function(resp) {
+    res.status(200).send(resp);
+  });
 });
 
 module.exports = router;

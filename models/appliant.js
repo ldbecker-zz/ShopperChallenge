@@ -13,6 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     workflow_state: DataTypes.STRING,
     date: DataTypes.DATEONLY
   }, {
+    timestamps: false,
     classMethods: {
       associate: function(models) {
         // associations can be defined here
